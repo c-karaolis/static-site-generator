@@ -1,15 +1,20 @@
-from textnode import TextNode
+import os
+import shutil
+
+from copystatic import copy_files_recursive
+
+
+dir_path_static = "./static"
+dir_path_public = "./public"
 
 
 def main():
-    text_node1 = TextNode("text1", "type1", "url1")
-    text_node2 = TextNode("text2", "type2", "url2")
-    text_node3 = TextNode("text1", "type1", "url1")
-    print(text_node1 == text_node2)
-    print(text_node1 == text_node3)
-    print(text_node1)
-    print(text_node2)
-    print(text_node3)
-    
+    print("Deleting public directory...")
+    if os.path.exists(dir_path_public):
+        shutil.rmtree(dir_path_public)
+
+    print("Copying static files to public directory...")
+    copy_files_recursive(dir_path_static, dir_path_public)
+
 
 main()
