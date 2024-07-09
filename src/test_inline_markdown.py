@@ -1,6 +1,8 @@
 import unittest
 from inline_markdown import (
     split_nodes_delimiter,
+    extract_markdown_links,
+    extract_markdown_images,
 )
 
 from textnode import (
@@ -71,7 +73,7 @@ class TestInlineMarkdown(unittest.TestCase):
         node = TextNode("**bold** and *italic*", text_type_text)
         new_nodes = split_nodes_delimiter([node], "**", text_type_bold)
         new_nodes = split_nodes_delimiter(new_nodes, "*", text_type_italic)
-        self.assertListEqual(
+        self.assertEqual(
             [
                 TextNode("bold", text_type_bold),
                 TextNode(" and ", text_type_text),
@@ -90,6 +92,24 @@ class TestInlineMarkdown(unittest.TestCase):
                 TextNode(" word", text_type_text),
             ],
             new_nodes,
+        )
+
+    def test_extract_markdown_images(self):
+        matches = extract_markdown_images(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+        )
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+
+    def test_extract_markdown_links(self):
+        matches = extract_markdown_links(
+            "This is text with a [link](https://boot.dev) and [another link](https://blog.boot.dev)"
+        )
+        self.assertListEqual(
+            [
+                ("link", "https://boot.dev"),
+                ("another link", "https://blog.boot.dev"),
+            ],
+            matches,
         )
 
 
