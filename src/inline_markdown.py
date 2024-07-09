@@ -106,3 +106,10 @@ def extract_markdown_links(text):
     pattern = r"\[(.*?)\]\((.*?)\)"
     matches = re.findall(pattern, text)
     return matches
+
+def extract_title(markdown):
+    lines = markdown.split('\n')
+    for line in lines:
+        if line.startswith('# '):
+            return line[2:]
+    raise Exception("Markdown content does not contain an h1 header.")
